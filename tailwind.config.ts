@@ -57,6 +57,26 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        climate: {
+          forest: "hsl(var(--climate-forest))",
+          ocean: "hsl(var(--climate-ocean))",
+          earth: "hsl(var(--climate-earth))",
+          sky: "hsl(var(--climate-sky))",
+          success: "hsl(var(--climate-success))",
+        },
+      },
+      backgroundImage: {
+        "gradient-earth": "var(--gradient-earth)",
+        "gradient-ocean": "var(--gradient-ocean)",
+        "gradient-sky": "var(--gradient-sky)",
+      },
+      boxShadow: {
+        "soft": "var(--shadow-soft)",
+        "marker": "var(--shadow-marker)",
+      },
+      transitionTimingFunction: {
+        "smooth": "var(--transition-smooth)",
+        "bounce": "var(--transition-bounce)",
       },
       borderRadius: {
         lg: "var(--radius)",
