@@ -70,6 +70,7 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
     category: string | null;
     region: string | null;
   }>({ category: null, region: null });
+  const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
 
   useEffect(() => {
     if (!mapContainer.current || !token) return;
@@ -101,6 +102,7 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
     });
 
     // Add markers for each project
+    const newMarkers: mapboxgl.Marker[] = [];
     projects.forEach((project) => {
       const IconComponent = categoryIcons[project.category];
       
@@ -121,15 +123,36 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
         setSelectedProject(project);
       });
 
-      new mapboxgl.Marker(markerElement)
+      const marker = new mapboxgl.Marker(markerElement)
         .setLngLat(project.coordinates)
         .addTo(map.current!);
+      
+      newMarkers.push(marker);
     });
+    
+    setMarkers(newMarkers);
 
     return () => {
+      markers.forEach(marker => marker.remove());
       map.current?.remove();
     };
   }, [token]);
+
+  // Update marker visibility based on filters
+  useEffect(() => {
+    markers.forEach((marker, index) => {
+      const project = projects[index];
+      const shouldShow = (!activeFilters.category || project.category === activeFilters.category) &&
+                        (!activeFilters.region || project.region === activeFilters.region);
+      
+      const element = marker.getElement();
+      if (shouldShow) {
+        element.style.display = 'flex';
+      } else {
+        element.style.display = 'none';
+      }
+    });
+  }, [activeFilters, markers]);
 
   const filteredProjects = projects.filter((project) => {
     if (activeFilters.category && project.category !== activeFilters.category) return false;
