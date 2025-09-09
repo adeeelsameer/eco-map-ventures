@@ -4,7 +4,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { X, MapPin, Leaf, Droplets, Wind } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { X, MapPin, Leaf, Droplets, Wind, Filter } from 'lucide-react';
 
 interface ClimateProject {
   id: string;
@@ -71,6 +72,7 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
     region: string | null;
   }>({ category: null, region: null });
   const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     if (!mapContainer.current || !token) return;
@@ -184,50 +186,77 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="absolute top-20 left-4 z-10 space-y-3">
-        <Card className="p-3 shadow-soft">
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">Category</h3>
-            <div className="space-y-1">
-              {['renewable-energy', 'forest-conservation', 'water-management'].map((category) => (
-                <Button
-                  key={category}
-                  variant={activeFilters.category === category ? "default" : "outline"}
-                  size="sm"
-                  className="w-full justify-start text-xs"
-                  onClick={() => handleFilter('category', category)}
-                >
-                  {category === 'renewable-energy' && <Wind className="h-3 w-3 mr-2" />}
-                  {category === 'forest-conservation' && <Leaf className="h-3 w-3 mr-2" />}
-                  {category === 'water-management' && <Droplets className="h-3 w-3 mr-2" />}
-                  {category.replace('-', ' ').split(' ').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1)
-                  ).join(' ')}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </Card>
+      {/* Compact Filter Button */}
+      <div className="absolute top-20 left-4 z-10">
+        <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+          <PopoverTrigger asChild>
+            <Button 
+              variant="outline" 
+              className="h-10 px-3 bg-background/95 backdrop-blur-sm shadow-soft border border-border/50"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
+              {(activeFilters.category || activeFilters.region) && (
+                <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                  {(activeFilters.category ? 1 : 0) + (activeFilters.region ? 1 : 0)}
+                </Badge>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 p-4 bg-background/95 backdrop-blur-sm" align="start">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium">Category</h3>
+                <div className="space-y-1">
+                  {['renewable-energy', 'forest-conservation', 'water-management'].map((category) => (
+                    <Button
+                      key={category}
+                      variant={activeFilters.category === category ? "default" : "outline"}
+                      size="sm"
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleFilter('category', category)}
+                    >
+                      {category === 'renewable-energy' && <Wind className="h-3 w-3 mr-2" />}
+                      {category === 'forest-conservation' && <Leaf className="h-3 w-3 mr-2" />}
+                      {category === 'water-management' && <Droplets className="h-3 w-3 mr-2" />}
+                      {category.replace('-', ' ').split(' ').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                      ).join(' ')}
+                    </Button>
+                  ))}
+                </div>
+              </div>
 
-        <Card className="p-3 shadow-soft">
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">Region</h3>
-            <div className="space-y-1">
-              {['europe', 'asia', 'americas'].map((region) => (
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium">Region</h3>
+                <div className="space-y-1">
+                  {['europe', 'asia', 'americas'].map((region) => (
+                    <Button
+                      key={region}
+                      variant={activeFilters.region === region ? "default" : "outline"}
+                      size="sm"
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleFilter('region', region)}
+                    >
+                      {region.charAt(0).toUpperCase() + region.slice(1)}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {(activeFilters.category || activeFilters.region) && (
                 <Button
-                  key={region}
-                  variant={activeFilters.region === region ? "default" : "outline"}
+                  variant="ghost"
                   size="sm"
-                  className="w-full justify-start text-xs"
-                  onClick={() => handleFilter('region', region)}
+                  className="w-full text-xs"
+                  onClick={() => setActiveFilters({ category: null, region: null })}
                 >
-                  {region.charAt(0).toUpperCase() + region.slice(1)}
+                  Clear all filters
                 </Button>
-              ))}
+              )}
             </div>
-          </div>
-        </Card>
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* Map */}
