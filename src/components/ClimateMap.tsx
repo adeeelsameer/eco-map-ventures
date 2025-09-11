@@ -171,20 +171,6 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
 
   return (
     <div className="h-screen bg-background relative">
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-sky/90 backdrop-blur-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gradient-earth flex items-center justify-center">
-              <MapPin className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold">Climate Impact Map</h1>
-              <p className="text-sm text-muted-foreground">Discover sustainability initiatives worldwide</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Compact Filter Button */}
       <div className="absolute top-20 left-4 z-10">
