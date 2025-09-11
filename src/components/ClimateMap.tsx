@@ -29,12 +29,12 @@ const projects: ClimateProject[] = [
   },
   {
     id: '2',
-    title: 'Amazon Regeneration Initiative',
-    description: 'Community-led forest restoration program working with indigenous communities to restore degraded rainforest areas.',
+    title: 'Vancouver Urban Forest Expansion',
+    description: 'A city-led initiative to expand Vancouver’s tree canopy, improve air quality, and enhance biodiversity in urban neighborhoods.',
     category: 'forest-conservation',
     region: 'americas',
-    coordinates: [-60.0, -3.0],
-    impact: 'Restored 50,000 hectares of rainforest'
+    coordinates: [-123.1207, 49.2827],
+    impact: 'Planted 150,000 new urban trees, reducing heat islands and absorbing 20,000 tons of CO2 annually'
   },
   {
     id: '3',
