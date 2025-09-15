@@ -140,7 +140,7 @@ const ClimateMap = ({ token }: ClimateMapProps) => {
     };
   }, [token]);
 
-  // Update marker visibility based on filters
+  // Update marker visibility based on filter
   useEffect(() => {
     markers.forEach((marker, index) => {
       const project = projects[index];
